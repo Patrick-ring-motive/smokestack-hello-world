@@ -1,0 +1,7 @@
+{
+  "project": "hello-world",
+  "cf-worker": "worker-id-or-subdomain",
+  "gas": "deployment-id",
+  "pages": "github-pages-url",
+  "directory-sheet": "sheet-id"
+}
