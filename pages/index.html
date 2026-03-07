@@ -273,9 +273,14 @@
       el.textContent = 'Firing up the boilers...';
 
       try {
-        const res = await fetch('https://import.smokestack.workers.dev/');
-        if (!res.ok) throw new Error('Pipeline error');
-        const joke = await res.text();
+        let joke;
+        try{
+          const res = await fetch('https://import.smokestack.workers.dev/');
+          if (!res.ok) throw new Error('Pipeline error');
+          joke = await res.text();
+        }catch{
+          joke = (await import(`https://import.smokestack.workers.dev/${Date.now()}jsonp`)).payload;
+        }
         el.textContent = joke;
         el.className = 'joke-text loaded';
         document.getElementById('timestamp').textContent =
