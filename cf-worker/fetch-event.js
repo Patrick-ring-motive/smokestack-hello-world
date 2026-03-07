@@ -5,6 +5,6 @@ export default {
     if(request.url.endsWith('jsonp')){
       text = `export const payload = \`${text.replaceAll('`',`'`)}\``;
     }
-    return new Response(text,{headers:{"Access-Control-Allow-Origin":"*"}});
+    return new Response(text,{headers:{"Access-Control-Allow-Origin":"*","content-type":"text/javascript"}});
   }
 }
