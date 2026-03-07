@@ -1,7 +1,22 @@
+const jokeURL = 'https://v2.jokeapi.dev/joke/Any?safe-mode&'+Date.now();
+
+function fetchText(url){
+  try{
+    const response = UrlFetchApp.fetch(url);
+    if(response.getResponseCode() === 200){
+      return response.getContentText();
+    }else{
+      return importData(url);
+    }
+  }catch{
+    return importData(url);
+  }
+}
+
 function doGet(e){
   let text;
   try{
-    text = importData('https://v2.jokeapi.dev/joke/Any?safe-mode&'+Date.now());
+    text = fetchText(jokeURL);
     console.log(text);
     const joke = eval(`(${text})`);
     if(joke.type === 'twopart'){
