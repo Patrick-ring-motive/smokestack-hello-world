@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smokestack — Joke of the Day</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0e0c;
+      --surface: #1a1814;
+      --ember: #e8540a;
+      --ember-dim: #7a2c05;
+      --smoke: #8a8278;
+      --ash: #3a3630;
+      --text: #f0ebe3;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Smoke particles */
+    .smoke-container {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--smoke);
+      opacity: 0;
+      animation: rise linear infinite;
+    }
+
+    @keyframes rise {
+      0%   { transform: translateX(0) scale(1);   opacity: 0; bottom: 0; }
+      10%  { opacity: 0.15; }
+      50%  { transform: translateX(var(--drift)) scale(3); opacity: 0.08; }
+      100% { transform: translateX(var(--drift2)) scale(6); opacity: 0; bottom: 100vh; }
+    }
+
+    /* Stack icon */
+    .stack-icon {
+      width: 48px;
+      height: 80px;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .chimney {
+      position: absolute;
+      bottom: 0;
+      background: var(--ash);
+      border-top: 3px solid var(--ember-dim);
+    }
+
+    .chimney-1 { width: 14px; height: 60px; left: 4px; }
+    .chimney-2 { width: 14px; height: 80px; left: 22px; }
+    .chimney-3 { width: 14px; height: 50px; left: 40px; }
+
+    .ember-dot {
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--ember);
+      box-shadow: 0 0 8px var(--ember);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--ember); }
+      50%       { opacity: 0.4; box-shadow: 0 0 3px var(--ember-dim); }
+    }
+
+    /* Header */
+    .wordmark {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      letter-spacing: 0.12em;
+      color: var(--text);
+      line-height: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    .wordmark span {
+      color: var(--ember);
+    }
+
+    .tagline {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--smoke);
+      text-transform: uppercase;
+      margin-top: 0.4rem;
+      margin-bottom: 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Joke card */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--ash);
+      border-top: 2px solid var(--ember-dim);
+      max-width: 640px;
+      width: 100%;
+      padding: 2.5rem 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      width: 40%;
+      height: 2px;
+      background: var(--ember);
+    }
+
+    .label {
+      font-size: 0.6rem;
+      letter-spacing: 0.35em;
+      color: var(--ember);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .joke-text {
+      font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+      line-height: 1.75;
+      color: var(--text);
+      font-style: italic;
+      min-height: 4em;
+      transition: opacity 0.4s ease;
+    }
+
+    .joke-text.loading {
+      opacity: 0.3;
+    }
+
+    .joke-text.loaded {
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--ash);
+      margin: 1.5rem 0;
+    }
+
+    .footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .timestamp {
+      font-size: 0.65rem;
+      color: var(--smoke);
+      letter-spacing: 0.1em;
+    }
+
+    .reload-btn {
+      background: none;
+      border: 1px solid var(--ash);
+      color: var(--smoke);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.4rem 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .reload-btn:hover {
+      border-color: var(--ember);
+      color: var(--ember);
+    }
+
+    .reload-btn:active {
+      background: var(--ember-dim);
+    }
+
+    .error {
+      color: var(--ember-dim);
+      font-style: normal;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="smoke-container" id="smokeContainer"></div>
+
+  <div class="stack-icon">
+    <div class="chimney chimney-1"><div class="ember-dot" style="animation-delay:0.3s"></div></div>
+    <div class="chimney chimney-2"><div class="ember-dot" style="animation-delay:0s"></div></div>
+    <div class="chimney chimney-3"><div class="ember-dot" style="animation-delay:0.6s"></div></div>
+  </div>
+
+  <h1 class="wordmark">SMOKE<span>STACK</span></h1>
+  <p class="tagline">Joke of the Day</p>
+
+  <div class="card">
+    <div class="label">// Today's Transmission</div>
+    <p class="joke-text loading" id="jokeText">Firing up the boilers...</p>
+    <hr class="divider">
+    <div class="footer-row">
+      <span class="timestamp" id="timestamp">—</span>
+      <button class="reload-btn" onclick="loadJoke()">New Joke ↻</button>
+    </div>
+  </div>
+
+  <script>
+    // Smoke particles
+    const container = document.getElementById('smokeContainer');
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const duration = 6 + Math.random() * 8;
+      const delay = Math.random() * 10;
+      const drift = (Math.random() - 0.5) * 120;
+      const drift2 = drift + (Math.random() - 0.5) * 60;
+      p.style.cssText = `
+        animation-duration: ${duration}s;
+        animation-delay: -${delay}s;
+        left: ${(Math.random() - 0.5) * 20}px;
+        --drift: ${drift}px;
+        --drift2: ${drift2}px;
+      `;
+      container.appendChild(p);
+    }
+
+    async function loadJoke() {
+      const el = document.getElementById('jokeText');
+      el.className = 'joke-text loading';
+      el.textContent = 'Firing up the boilers...';
+
+      try {
+        const res = await fetch('https://import.smokestack.workers.dev/');
+        if (!res.ok) throw new Error('Pipeline error');
+        const joke = await res.text();
+        el.textContent = joke;
+        el.className = 'joke-text loaded';
+        document.getElementById('timestamp').textContent =
+          new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+      } catch (e) {
+        el.className = 'joke-text error';
+        el.textContent = String(e);
+      }
+    }
+
+    loadJoke();
+  </script>
+</body>
+</html>
