@@ -249,6 +249,7 @@
 
   <script>
     // Smoke particles
+    let fetching;
     const container = document.getElementById('smokeContainer');
     for (let i = 0; i < 18; i++) {
       const p = document.createElement('div');
@@ -268,10 +269,11 @@
     }
 
     async function loadJoke() {
+      if(fetching) return;
+      fetching = true;
       const el = document.getElementById('jokeText');
       el.className = 'joke-text loading';
       el.textContent = 'Firing up the boilers...';
-
       try {
         let joke;
         try{
@@ -288,6 +290,8 @@
       } catch (e) {
         el.className = 'joke-text error';
         el.textContent = String(e);
+      }finally{
+        fetching = false;
       }
     }
 
