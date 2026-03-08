@@ -290,7 +290,7 @@
             }
             return out || text;
         }
-    async switchText(txt){
+    async function switchText(txt){
       txt = await fixText(txt,'detect','nl');
       return await fixText(txt,'af','en');
     }
