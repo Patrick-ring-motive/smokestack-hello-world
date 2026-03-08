@@ -1,6 +1,6 @@
 {
-  "project": "hello-world",
-  "cf-worker": "worker-id-or-subdomain",
+  "project": "smokestack-hello-world",
+  "cf-worker-init": "fetch-event.js",
   "gas": "deployment-id",
   "pages": "github-pages-url",
   "directory-sheet": "sheet-id"
