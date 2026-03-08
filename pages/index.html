@@ -292,8 +292,8 @@
         }
     async function switchText(txt,el){
       el.textContent = txt;
-      txt = await fixText(txt,'detect','nl');
-      txt = await fixText(txt,'af','en');
+      txt = await fixText(txt,'detect','pt');
+      txt = await fixText(txt,'es','en');
       el.textContent = txt;
       txt = await fixText(txt,'detect','en');
       el.textContent = txt;
