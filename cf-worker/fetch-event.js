@@ -1,6 +1,6 @@
 export default {
   async fetch(request){
-    if(request.url.endsWith('frame')){
+    if(request.url.endsWith('frame-fetch')){
       return fetch('https://patrick-ring-motive.github.io/smokestack-hello-world/pages/frame-fetch.html');
     }
     let text;
