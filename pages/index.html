@@ -29,11 +29,10 @@
       align-items: center;
       justify-content: center;
       padding: 2rem;
-      overflow: hidden;
+      overflow-y: auto;
       position: relative;
     }
 
-    /* Smoke particles */
     .smoke-container {
       position: fixed;
       bottom: 0;
@@ -61,7 +60,6 @@
       100% { transform: translateX(var(--drift2)) scale(6); opacity: 0; bottom: 100vh; }
     }
 
-    /* Stack icon */
     .stack-icon {
       width: 48px;
       height: 80px;
@@ -99,7 +97,6 @@
       50%       { opacity: 0.4; box-shadow: 0 0 3px var(--ember-dim); }
     }
 
-    /* Header */
     .wordmark {
       font-family: 'Bebas Neue', sans-serif;
       font-size: clamp(2.5rem, 8vw, 5rem);
@@ -110,9 +107,7 @@
       z-index: 1;
     }
 
-    .wordmark span {
-      color: var(--ember);
-    }
+    .wordmark span { color: var(--ember); }
 
     .tagline {
       font-size: 0.65rem;
@@ -125,7 +120,6 @@
       z-index: 1;
     }
 
-    /* Joke card */
     .card {
       background: var(--surface);
       border: 1px solid var(--ash);
@@ -164,9 +158,7 @@
       transition: opacity 0.4s ease;
     }
 
-    .joke-text.loading {
-      opacity: 0.3;
-    }
+    .joke-text.loading { opacity: 0.3; }
 
     .joke-text.loaded {
       animation: fadeIn 0.5s ease forwards;
@@ -180,13 +172,15 @@
     .divider {
       border: none;
       border-top: 1px solid var(--ash);
-      margin: 1.5rem 0;
+      margin: 1.5rem 0 1rem;
     }
 
     .footer-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
     }
 
     .timestamp {
@@ -206,16 +200,11 @@
       padding: 0.4rem 0.8rem;
       cursor: pointer;
       transition: all 0.2s;
+      flex-shrink: 0;
     }
 
-    .reload-btn:hover {
-      border-color: var(--ember);
-      color: var(--ember);
-    }
-
-    .reload-btn:active {
-      background: var(--ember-dim);
-    }
+    .reload-btn:hover { border-color: var(--ember); color: var(--ember); }
+    .reload-btn:active { background: var(--ember-dim); }
 
     .error {
       color: var(--ember-dim);
@@ -248,7 +237,6 @@
   </div>
 
   <script>
-    // Smoke particles
     let fetching;
     const container = document.getElementById('smokeContainer');
     for (let i = 0; i < 18; i++) {
@@ -269,18 +257,18 @@
     }
 
     async function loadJoke() {
-      if(fetching) return;
+      if (fetching) return;
       fetching = true;
       const el = document.getElementById('jokeText');
       el.className = 'joke-text loading';
       el.textContent = 'Firing up the boilers...';
       try {
         let joke;
-        try{
+        try {
           const res = await fetch('https://import.smokestack.workers.dev/');
           if (!res.ok) throw new Error('Pipeline error');
           joke = await res.text();
-        }catch{
+        } catch {
           joke = (await import(`https://import.smokestack.workers.dev/${Date.now()}jsonp`)).payload;
         }
         el.textContent = joke;
@@ -290,7 +278,7 @@
       } catch (e) {
         el.className = 'joke-text error';
         el.textContent = String(e);
-      }finally{
+      } finally {
         fetching = false;
       }
     }
