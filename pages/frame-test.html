@@ -10,7 +10,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-```
+
 :root {
   --bg: #0f0e0c;
   --surface: #1a1814;
@@ -213,7 +213,7 @@ body {
   font-style: normal;
   font-size: 0.85rem;
 }
-```
+
 
   </style>
 </head>
@@ -261,6 +261,7 @@ body {
         iframe.style.cssText = 'position:fixed;width:0;height:0;border:0;visibility:hidden;';
         iframe.src = `${WORKER}/${uuid}/frame-fetch`;
         frameFetches.set(uuid, { resolve, reject, iframe });
+        iframe.onerror = reject;
         document.body.appendChild(iframe);
       });
     }
