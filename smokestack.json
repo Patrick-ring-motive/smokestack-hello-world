@@ -1,7 +1,7 @@
 {
   "project": "smokestack-hello-world",
   "cf-worker-init": "fetch-event.js",
-  "gas": "deployment-id",
+  "gas-init": "do-get.js",
   "pages": "github-pages-url",
   "directory-sheet": "sheet-id"
 }
