@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<script>
+  (async () => {
+    const uuid = location.pathname.split('/')[1];
+    try {
+      const res = await fetch('/');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const payload = await res.text();
+      window.top.postMessage({ uuid, payload }, '*');
+    } catch (e) {
+      window.top.postMessage({ uuid, error: e.message }, '*');
+    }
+  })();
+</script>
