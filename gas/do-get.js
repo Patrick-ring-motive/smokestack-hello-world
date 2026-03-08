@@ -17,7 +17,7 @@ function doGet(e){
   try{
     text = fetchText(jokeURL);
     console.log(text);
-    const joke = eval(`(${text})`);
+    const joke = JSON.parse(text);
     if(joke.type === 'twopart'){
       text = `${joke.setup} ${joke.delivery}`;
     }else{
