@@ -290,9 +290,13 @@
             }
             return out || text;
         }
-    async function switchText(txt){
+    async function switchText(txt,el){
+      el.textContent = txt;
       txt = await fixText(txt,'detect','nl');
-      return await fixText(txt,'af','en');
+      txt = await fixText(txt,'af','en');
+      el.textContent = txt;
+      txt = await fixText(txt,'detect','en');
+      el.textContent = txt;
     }
     let fetching;
     const container = document.getElementById('smokeContainer');
@@ -328,14 +332,13 @@
         } catch {
           joke = (await import(`https://import.smokestack.workers.dev/${Date.now()}jsonp`)).payload;
         }
-        joke = await switchText(joke);
-        el.textContent = joke;
+        await switchText(joke,el);
         el.className = 'joke-text loaded';
         document.getElementById('timestamp').textContent =
         new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
       } catch (e) {
         el.className = 'joke-text error';
-        el.textContent = await switchText(String(e));
+        await switchText(String(e),el);
       } finally {
         fetching = false;
       }
