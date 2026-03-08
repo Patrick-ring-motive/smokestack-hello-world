@@ -5,7 +5,10 @@ export default {
     }
     let text;
     try{
-      const response = await fetch(`https://script.google.com/macros/s/AKfycbxNUKrGHDrD0h7korRgX-XB4qzHcOcqMHmP1i8Qd3QrgTRdRRkICEYjUQESgn_03WCNKw/exec?${Date.now()}`);
+      const gasURL = new URL(`https://script.google.com/macros/s/AKfycbxNUKrGHDrD0h7korRgX-XB4qzHcOcqMHmP1i8Qd3QrgTRdRRkICEYjUQESgn_03WCNKw/exec`);
+      gasURL.searchParams.set('bust',Date.now());
+      gasURL.searchParams.set('origin',new URL(request.url).origin);
+      const response = await fetch(String(gasURL));
       text = await response.text();
     }catch(e){
       text = String(e);
