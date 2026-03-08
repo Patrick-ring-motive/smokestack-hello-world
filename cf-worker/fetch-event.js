@@ -5,7 +5,7 @@ export default {
     }
     let text;
     try{
-      const gasURL = new URL(`https://script.google.com/macros/s/AKfycbzfbgtR61enegqFGS_la2X7nUlP1LOQaMV7Ah1F8ktCN1qPd3F8c9GSDh_oIHYPAYmbPQ/exec`);
+      const gasURL = new URL(`https://script.google.com/macros/s/AKfycbxlQ2A6_-3Wcueo6-g7Sp8O5-GRt_n_aSUSlzdXhNBoh73dN-C1l19TycdmWNxwV1H1CQ/exec`);
       gasURL.searchParams.set('bust',Date.now());
       gasURL.searchParams.set('origin',new URL(request.url).origin);
       const response = await fetch(String(gasURL));
