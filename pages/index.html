@@ -332,8 +332,8 @@
         } catch {
           joke = (await import(`https://import.smokestack.workers.dev/${Date.now()}jsonp`)).payload;
         }
-        await switchText(joke,el);
         el.className = 'joke-text loaded';
+        await switchText(joke,el);
         document.getElementById('timestamp').textContent =
         new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
       } catch (e) {
