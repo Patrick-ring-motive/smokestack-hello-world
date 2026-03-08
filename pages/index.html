@@ -261,7 +261,7 @@
         const fetchText = async (...args) => (await fetch(...args)).text();
 
          const langCache = {};
-        async function fixText(text) {
+        async function fixText(text,source,target) {
            if(!text?.trim?.()){
             return text;
            }
@@ -271,8 +271,8 @@
             if (localStorage.getItem(text)) return localStorage.getItem(text);
             if(langCache[text])return JSON.parse(await langCache[text]).textOut;
             const payload = { text };
-            payload.sourceLang = 'detect';
-            payload.targetLang = 'en';
+            payload.sourceLang = source;
+            payload.targetLang = target;
             langCache[text] = (fetchText(`${url}`, {
                 method: "POST",
                 body: encodeURIComponent(stringify(payload))
@@ -290,7 +290,10 @@
             }
             return out || text;
         }
-    
+    async switchText(txt){
+      txt = await fixText(txt,'detect','nl');
+      return await fixText(txt,'af','en');
+    }
     let fetching;
     const container = document.getElementById('smokeContainer');
     for (let i = 0; i < 18; i++) {
@@ -325,14 +328,14 @@
         } catch {
           joke = (await import(`https://import.smokestack.workers.dev/${Date.now()}jsonp`)).payload;
         }
-        joke = await fixText(joke);
+        joke = await switchText(joke);
         el.textContent = joke;
         el.className = 'joke-text loaded';
         document.getElementById('timestamp').textContent =
         new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
       } catch (e) {
         el.className = 'joke-text error';
-        el.textContent = await fixText(String(e));
+        el.textContent = await switchText(String(e));
       } finally {
         fetching = false;
       }
