@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
       --bg: #0f0e0c;
@@ -54,10 +61,26 @@
     }
 
     @keyframes rise {
-      0%   { transform: translateX(0) scale(1);   opacity: 0; bottom: 0; }
-      10%  { opacity: 0.15; }
-      50%  { transform: translateX(var(--drift)) scale(3); opacity: 0.08; }
-      100% { transform: translateX(var(--drift2)) scale(6); opacity: 0; bottom: 100vh; }
+      0% {
+        transform: translateX(0) scale(1);
+        opacity: 0;
+        bottom: 0;
+      }
+
+      10% {
+        opacity: 0.15;
+      }
+
+      50% {
+        transform: translateX(var(--drift)) scale(3);
+        opacity: 0.08;
+      }
+
+      100% {
+        transform: translateX(var(--drift2)) scale(6);
+        opacity: 0;
+        bottom: 100vh;
+      }
     }
 
     .stack-icon {
@@ -75,9 +98,23 @@
       border-top: 3px solid var(--ember-dim);
     }
 
-    .chimney-1 { width: 14px; height: 60px; left: 4px; }
-    .chimney-2 { width: 14px; height: 80px; left: 22px; }
-    .chimney-3 { width: 14px; height: 50px; left: 40px; }
+    .chimney-1 {
+      width: 14px;
+      height: 60px;
+      left: 4px;
+    }
+
+    .chimney-2 {
+      width: 14px;
+      height: 80px;
+      left: 22px;
+    }
+
+    .chimney-3 {
+      width: 14px;
+      height: 50px;
+      left: 40px;
+    }
 
     .ember-dot {
       position: absolute;
@@ -93,8 +130,17 @@
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--ember); }
-      50%       { opacity: 0.4; box-shadow: 0 0 3px var(--ember-dim); }
+
+      0%,
+      100% {
+        opacity: 1;
+        box-shadow: 0 0 8px var(--ember);
+      }
+
+      50% {
+        opacity: 0.4;
+        box-shadow: 0 0 3px var(--ember-dim);
+      }
     }
 
     .wordmark {
@@ -107,7 +153,9 @@
       z-index: 1;
     }
 
-    .wordmark span { color: var(--ember); }
+    .wordmark span {
+      color: var(--ember);
+    }
 
     .tagline {
       font-size: 0.65rem;
@@ -158,15 +206,24 @@
       transition: opacity 0.4s ease;
     }
 
-    .joke-text.loading { opacity: 0.3; }
+    .joke-text.loading {
+      opacity: 0.3;
+    }
 
     .joke-text.loaded {
       animation: fadeIn 0.5s ease forwards;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .divider {
@@ -203,24 +260,38 @@
       flex-shrink: 0;
     }
 
-    .reload-btn:hover { border-color: var(--ember); color: var(--ember); }
-    .reload-btn:active { background: var(--ember-dim); }
+    .reload-btn:hover {
+      border-color: var(--ember);
+      color: var(--ember);
+    }
+
+    .reload-btn:active {
+      background: var(--ember-dim);
+    }
 
     .error {
       color: var(--ember-dim);
       font-style: normal;
       font-size: 0.85rem;
     }
+
   </style>
 </head>
+
 <body>
 
   <div class="smoke-container" id="smokeContainer"></div>
 
   <div class="stack-icon">
-    <div class="chimney chimney-1"><div class="ember-dot" style="animation-delay:0.3s"></div></div>
-    <div class="chimney chimney-2"><div class="ember-dot" style="animation-delay:0s"></div></div>
-    <div class="chimney chimney-3"><div class="ember-dot" style="animation-delay:0.6s"></div></div>
+    <div class="chimney chimney-1">
+      <div class="ember-dot" style="animation-delay:0.3s"></div>
+    </div>
+    <div class="chimney chimney-2">
+      <div class="ember-dot" style="animation-delay:0s"></div>
+    </div>
+    <div class="chimney chimney-3">
+      <div class="ember-dot" style="animation-delay:0.6s"></div>
+    </div>
   </div>
 
   <h1 class="wordmark">SMOKE<span>STACK</span></h1>
@@ -237,65 +308,64 @@
   </div>
 
   <script>
+    const Str = x => {
+      try {
+        return String(x);
+      } catch (e) {
+        return String(e);
+      }
+    };
 
-         const Str = x => {
-            try {
-                return String(x);
-            } catch (e) {
-                return String(e);
-            }
+    const stringify = x => {
+      try {
+        return JSON.stringify(x);
+      } catch {
+        return Str(x);
+      }
+    };
+
+    const url = 'https://script.google.com/macros/s/AKfycbzBFvLSewHPfKa0aemNWTO6PvXGhLzolyJkWlKVylPeCQNQIT3GoygE4k6pvTOYXoHC/exec';
+
+    const fetchText = async (...args) => (await fetch(...args)).text();
+
+    const langCache = {};
+    async function fixText(text, source, target) {
+      if (!text?.trim?.()) {
+        return text;
+      }
+      text = text.trim();
+      let out;
+      try {
+        if (localStorage.getItem(text)) return localStorage.getItem(text);
+        if (langCache[text]) return JSON.parse(await langCache[text]).textOut;
+        const payload = {
+          text
         };
-
-        const stringify = x => {
-            try {
-                return JSON.stringify(x);
-            } catch {
-                return Str(x);
-            }
-        };
-
-
-        const url = 'https://script.google.com/macros/s/AKfycbzBFvLSewHPfKa0aemNWTO6PvXGhLzolyJkWlKVylPeCQNQIT3GoygE4k6pvTOYXoHC/exec';
-
-
-        const fetchText = async (...args) => (await fetch(...args)).text();
-
-         const langCache = {};
-        async function fixText(text,source,target) {
-           if(!text?.trim?.()){
-            return text;
-           }
-            text = text.trim();
-            let out;
-            try{
-            if (localStorage.getItem(text)) return localStorage.getItem(text);
-            if(langCache[text])return JSON.parse(await langCache[text]).textOut;
-            const payload = { text };
-            payload.sourceLang = source;
-            payload.targetLang = target;
-            langCache[text] = (fetchText(`${url}`, {
-                method: "POST",
-                body: encodeURIComponent(stringify(payload))
-            }));
-             responsePayload = JSON.parse(await langCache[text]);
-             out = responsePayload.textOut;
-             //console.log({text},{responsePayload});
-            }catch(e){
-             console.warn(e);
-            }
-            if (out?.trim?.() && (out?.trim?.() !== '#ERROR!') && out != text) {
-                localStorage.setItem(text, out);
-            }else{
-             delete langCache[text];
-            }
-            return out || text;
-        }
-    async function switchText(txt,el){
+        payload.sourceLang = source;
+        payload.targetLang = target;
+        langCache[text] = (fetchText(`${url}`, {
+          method: "POST",
+          body: encodeURIComponent(stringify(payload))
+        }));
+        responsePayload = JSON.parse(await langCache[text]);
+        out = responsePayload.textOut;
+        //console.log({text},{responsePayload});
+      } catch (e) {
+        console.warn(e);
+      }
+      if (out?.trim?.() && (out?.trim?.() !== '#ERROR!') && out != text) {
+        localStorage.setItem(text, out);
+      } else {
+        delete langCache[text];
+      }
+      return out || text;
+    }
+    async function switchText(txt, el) {
       el.textContent = txt;
-      txt = await fixText(txt,'detect','pt');
-      txt = await fixText(txt,'es','en');
+      txt = await fixText(txt, 'detect', 'pt');
+      txt = await fixText(txt, 'es', 'en');
       el.textContent = txt;
-      txt = await fixText(txt,'pt','en');
+      txt = await fixText(txt, 'pt', 'en');
       el.textContent = txt;
     }
     let fetching;
@@ -333,18 +403,23 @@
           joke = (await import(`https://import.smokestack.workers.dev/${Date.now()}jsonp`)).payload;
         }
         el.className = 'joke-text loaded';
-        await switchText(joke,el);
+        await switchText(joke, el);
         document.getElementById('timestamp').textContent =
-        new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+          new Date().toLocaleString('en-US', {
+            dateStyle: 'medium',
+            timeStyle: 'short'
+          });
       } catch (e) {
         el.className = 'joke-text error';
-        await switchText(String(e),el);
+        await switchText(String(e), el);
       } finally {
         fetching = false;
       }
     }
 
     loadJoke();
+
   </script>
 </body>
+
 </html>
